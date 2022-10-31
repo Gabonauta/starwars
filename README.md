@@ -45,6 +45,8 @@ https://user-images.githubusercontent.com/30781044/199123928-0324803a-7a38-42de-
 <p>Necesario para realizar peticiones https hacia la API https://swapi.dev/documentation</p>
 3. flutter_cube.-  https://pub.dev/packages/flutter_cube 
 <p>Util para invocar objetos en 3d (.obj)</p>
+4. sensors_plus.- https://pub.dev/packages/sensors_plus
+<p>Facilita el consumo de sensores de dispositivos</p>
 
 <h2>Probarlo</h2>
 <p>Para probar la aplicación es necesario contar con flutter y un dispositivo Android o IOS.</br>
