@@ -5,7 +5,6 @@ import '../Models/models.dart';
 
 class PeopleProvider extends ChangeNotifier {
   PeopleProvider() {
-    print("movies prov init");
     loadCharacters();
   }
   bool _filterMale = false;
@@ -51,7 +50,6 @@ class PeopleProvider extends ChangeNotifier {
       final response = await dio.get(url);
       Pagination alldata = Pagination.fromMap(response.data);
       charactersMap = [...charactersMap, ...alldata.results];
-      print(charactersMap);
 
       notifyListeners();
     }

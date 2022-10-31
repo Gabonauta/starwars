@@ -19,35 +19,35 @@ class InitialScreen extends StatelessWidget {
         ),
       ),
       body: PageView(children: [
-        Container(
-          decoration: const BoxDecoration(
-            color: Colors.black,
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: NetworkImage(
-                "https://static.wikia.nocookie.net/esstarwars/images/6/6f/Anakin_Skywalker_RotS.png/revision/latest?cb=20160226204939",
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                  pageBuilder: (_, __, ___) => const PeopleScreen(),
+                  transitionDuration: const Duration(seconds: 1)),
+            );
+          },
+          child: Container(
+            decoration: const BoxDecoration(
+              color: Colors.black,
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: NetworkImage(
+                  "https://static.wikia.nocookie.net/esstarwars/images/6/6f/Anakin_Skywalker_RotS.png/revision/latest?cb=20160226204939",
+                ),
               ),
             ),
+            child: const Center(child: Text("Personajes")),
           ),
-          child: Center(
-              child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                          pageBuilder: (_, __, ___) => PeopleScreen(),
-                          transitionDuration: const Duration(seconds: 1)),
-                    );
-                  },
-                  child: const Text("Personajes"))),
         ),
         Container(
-          color: Colors.red,
-          child: const Text("page 2"),
+          color: Colors.black,
+          child: const Text("Films"),
         ),
         Container(
-          color: Colors.red,
-          child: const Text("page 3"),
+          color: Colors.brown,
+          child: const Text("Planets"),
         )
       ]),
     );
