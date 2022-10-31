@@ -6,27 +6,28 @@ import 'dart:convert';
 
 import 'package:starwars/Models/people.dart';
 
-class Page {
-  Page({
+class Pagination {
+  Pagination({
     required this.count,
-    required this.next,
+    this.next,
     this.previous,
     required this.results,
   });
 
   int count;
-  String next;
+  String? next;
   String? previous;
   List<People> results;
 
-  factory Page.fromJson(String str) => Page.fromMap(json.decode(str));
+  factory Pagination.fromJson(String str) =>
+      Pagination.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory Page.fromMap(Map<String, dynamic> json) => Page(
+  factory Pagination.fromMap(Map<String, dynamic> json) => Pagination(
         count: json["count"],
-        next: json["next"],
-        previous: json["previous"] ?? 1,
+        next: json["next"] ?? "9",
+        previous: json["previous"] ?? "1",
         results:
             List<People>.from(json["results"].map((x) => People.fromMap(x))),
       );
