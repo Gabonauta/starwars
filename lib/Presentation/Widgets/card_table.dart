@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:starwars/Providers/cube_provider.dart';
 
 import '../../Models/people.dart';
 import '../../Providers/people_provider.dart';
@@ -16,14 +17,19 @@ class CardTable extends StatefulWidget {
 
 class _CardTableState extends State<CardTable> {
   final ScrollController scrollController = ScrollController();
-
+  double translation = 0.0;
   @override
   void initState() {
     super.initState();
     scrollController.addListener(() {
+      setState(() {
+        translation = scrollController.position.pixels;
+        print(translation);
+      });
       if (scrollController.position.pixels >=
           (scrollController.position.maxScrollExtent - 200)) {
         //Todo next page
+        translation = scrollController.position.pixels;
         widget.onNextPage();
       }
     });
@@ -38,6 +44,7 @@ class _CardTableState extends State<CardTable> {
   @override
   Widget build(BuildContext context) {
     final charactersService = Provider.of<PeopleProvider>(context);
+    final cube = Provider.of<CubeProvider>(context);
     List<People> people = [];
     List<People> peopleFiltered = [];
     List<People> peopleFilteredF = [];
@@ -56,12 +63,14 @@ class _CardTableState extends State<CardTable> {
     } else {
       people = widget.character;
     }
-
     return ListView.builder(
       controller: scrollController,
       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
       itemCount: people.length,
       itemBuilder: (context, index) {
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
+          cube.rotateY(translation);
+        });
         return Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: _CharacterCard(

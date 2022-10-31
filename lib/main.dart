@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:starwars/Providers/cube_provider.dart';
 import 'package:starwars/Providers/people_provider.dart';
 
 import 'Presentation/Screens/screens.dart';
@@ -9,6 +10,9 @@ void main() => runApp(
         providers: [
           ChangeNotifierProvider(
             create: (_) => PeopleProvider(),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => CubeProvider(),
           ),
         ],
         child: const MyApp(),
