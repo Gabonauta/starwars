@@ -16,7 +16,7 @@ class Page {
 
   int count;
   String next;
-  String? previous;
+  int? previous;
   List<People> results;
 
   factory Page.fromJson(String str) => Page.fromMap(json.decode(str));
