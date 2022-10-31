@@ -35,7 +35,7 @@ class InitialScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       PageRouteBuilder(
-                          pageBuilder: (_, __, ___) => const PeopleScreen(),
+                          pageBuilder: (_, __, ___) => PeopleScreen(),
                           transitionDuration: const Duration(seconds: 1)),
                     );
                   },

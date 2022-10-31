@@ -1,65 +1,106 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../Models/models.dart';
+import '../../Models/people.dart';
 import '../../Providers/people_provider.dart';
 
 class CardTable extends StatefulWidget {
-  const CardTable({Key? key}) : super(key: key);
+  final List<People> character;
+  final Function onNextPage;
+  const CardTable({Key? key, required this.onNextPage, required this.character})
+      : super(key: key);
 
   @override
   State<CardTable> createState() => _CardTableState();
 }
 
 class _CardTableState extends State<CardTable> {
+  final ScrollController scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(() {
+      if (scrollController.position.pixels >=
+          (scrollController.position.maxScrollExtent - 200)) {
+        //Todo next page
+        widget.onNextPage();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    //Todo dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final charactersService = Provider.of<PeopleProvider>(context);
+    List<People> people = [];
+    List<People> peopleFiltered = [];
+    List<People> peopleFilteredF = [];
 
-    return FutureBuilder(
-      future: charactersService.people,
-      builder: (BuildContext context, AsyncSnapshot<List<People>> snapshot) {
-        final controller = ScrollController();
-        if (snapshot.hasData) {
-          return ListView.builder(
-            controller: controller,
-            itemCount: snapshot.data!.length,
-            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 50),
-            itemBuilder: (context, index) {
-              if (index < snapshot.data!.length) {
-                return const Padding(
-                  padding: EdgeInsets.only(bottom: 50),
-                  child: _CharacterCard(),
-                );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.red,
-                  ),
-                );
-              }
-            },
-          );
-        }
-        if (snapshot.hasError) {
-          return Text(snapshot.error.toString());
-        } else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+    for (var element in widget.character) {
+      if (element.gender == "male" && charactersService.filter) {
+        peopleFiltered.add(element);
+      } else if (element.gender == "female" && charactersService.femaleFilter) {
+        peopleFilteredF.add(element);
+      }
+    }
+    if (charactersService.filter) {
+      people = peopleFiltered;
+    } else if (charactersService.femaleFilter) {
+      people = peopleFilteredF;
+    } else {
+      people = widget.character;
+    }
+
+    return ListView.builder(
+      controller: scrollController,
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+      itemCount: people.length,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: _CharacterCard(
+            people: people,
+            index: index,
+          ),
+        );
       },
     );
   }
 }
 
 class _CharacterCard extends StatelessWidget {
-  const _CharacterCard({
-    Key? key,
-  }) : super(key: key);
+  final List<People> people;
+  final int index;
+
+  const _CharacterCard({Key? key, required this.people, required this.index})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var episode = people[index].films;
+    List<String> films = [];
+    for (var element in episode) {
+      if (element == "https://swapi.dev/api/films/1/") {
+        films.add("4");
+      } else if (element == "https://swapi.dev/api/films/2/") {
+        films.add("5");
+      } else if (element == "https://swapi.dev/api/films/3/") {
+        films.add("6");
+      } else if (element == "https://swapi.dev/api/films/4/") {
+        films.add("1");
+      } else if (element == "https://swapi.dev/api/films/5/") {
+        films.add("2");
+      } else {
+        films.add("3");
+      }
+      films.sort();
+    }
     return Container(
       height: 200,
       width: 200,
@@ -73,9 +114,14 @@ class _CharacterCard extends StatelessWidget {
               const Spacer(
                 flex: 2,
               ),
-              Text("Luke Skywalker",
+              Text(people[index].name,
                   style: Theme.of(context).textTheme.titleLarge),
-              const Icon(Icons.male),
+              if (people[index].gender == "n/a")
+                const Icon(Icons.android)
+              else if (people[index].gender == "female")
+                const Icon(Icons.female)
+              else
+                const Icon(Icons.male),
               const Spacer(
                 flex: 2,
               ),
@@ -92,17 +138,20 @@ class _CharacterCard extends StatelessWidget {
               const Spacer(),
             ],
           ),
-          Text(
-            "Film1",
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          Text(
-            "Film1",
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          Text(
-            "Film1",
-            style: Theme.of(context).textTheme.titleMedium,
+          const Spacer(),
+          Row(
+            children: [
+              const Spacer(),
+              Text(
+                "Episodio: ",
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              Text(
+                films.toString(),
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const Spacer(),
+            ],
           ),
           const Spacer(),
         ],
