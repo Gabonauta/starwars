@@ -16,11 +16,13 @@ class PeopleScreen extends StatelessWidget {
             IconButton(
                 onPressed: () {
                   charactersService.activateMaleFilter();
+                  charactersService.desactivateFemaleFilter();
                 },
                 icon: const Icon(Icons.male)),
             IconButton(
                 onPressed: () {
                   charactersService.activateFemaleFilter();
+                  charactersService.desactivateMaleFilter();
                 },
                 icon: const Icon(Icons.female)),
             IconButton(
